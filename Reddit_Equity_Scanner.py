@@ -1,7 +1,7 @@
 # Author : Jeff Jones
 # Please note that a user must register their own Reddit application to obtain a client Id and
 # a key string (called a 'secret') to initialize the API.  You can't just run this code without taking these steps.
-#
+# see lines 100-103
 
 import praw
 import pandas as pd
