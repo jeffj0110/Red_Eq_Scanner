@@ -1,7 +1,7 @@
 # Author : Jeff Jones
 # Please note that a user must register their own Reddit application to obtain a client Id and
 # a key string (called a 'secret') to initialize the API.  You can't just run this code without taking these steps.
-# see lines 100-103
+# see lines 108-111
 
 import praw
 import pandas as pd
@@ -107,8 +107,8 @@ def Symbol_Lookup(incoming_text):
 def Process_Reddit_Posts() :
     # Use the PRAW library connect to reddit with a registered API.
     # The ID's are provided when you fill out their form to register your app
-    reddit = praw.Reddit(client_id='Uk8bEsY94zqc-A', client_secret='rUztaipnKZjq8bn0t77Wofq3HC7LbA',
-                     user_agent='Equity_Scanner')
+    reddit = praw.Reddit(client_id='need a client ID', client_secret='need to obtain via registration',
+                     user_agent='create your own apps name')
 
     # This retrieves 100 posts and allows access to all the comments.
     # The limit is 100
