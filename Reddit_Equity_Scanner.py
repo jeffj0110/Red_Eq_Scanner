@@ -23,7 +23,11 @@ def Initialize_Setup() :
     Nyse = './NYSE_Symbols.csv'
     Amex = './AMEX_Symbols.csv'
     ProcessedPosts = './Reddit_Posts.txt'
-    Reddit_Stats = './Reddit_Stats.csv'
+
+    date_time_obj = datetime.now()
+    date_str = str(date_time_obj.date())
+    date_str = re.sub(r'-', '', date_str)  # remove the dashes
+    Reddit_Stats = './' + date_str + '_Reddit_Stats.csv'
     global Posts_Output, Stats_Output
     Posts_Output = open(ProcessedPosts, "w")
     Stats_Output = open(Reddit_Stats, "w")
@@ -81,6 +85,10 @@ def Symbol_Lookup(incoming_text):
     HitorMiss = False
     post_text = cleanTxt(incoming_text)
 
+    # Posts which are all upper case result in false positives
+    if post_text.isupper() :
+        return HitorMiss
+
     for EachSymbol in frame["Symbol"]:
         if ((post_text.startswith(EachSymbol + " "))
                 or (post_text.endswith(" " + EachSymbol))
@@ -104,7 +112,7 @@ def Process_Reddit_Posts() :
 
     # This retrieves 100 posts and allows access to all the comments.
     # The limit is 100
-    Top1000Posts = reddit.subreddit('WallStreetBets').hot(limit=100)
+    Top1000Posts = reddit.subreddit('WallStreetBets').hot(limit=10)
 
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
@@ -150,6 +158,9 @@ def Process_Reddit_Posts() :
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     frame.sort_values('Counter', ascending=False, inplace=True)
+    temp_string = "Date_Time," + "Symbol," + "Company_Name," + "Raw_Hits," + "Sentiment_Degree," + "Sentiment_Text," + "Hits"
+    print(temp_string)
+    Stats_Output.write("%s \n" % temp_string)
     for EachSymbol in frame["Symbol"]:
         if frame.iloc[RowSymbol, 11] > 0:
             frame.iloc[RowSymbol, 13] = TextBlob(frame.iloc[RowSymbol, 12]).sentiment.polarity
